@@ -14,7 +14,7 @@ type ModuleArgs struct {
 
 func main() {
 	var args ModuleArgs
-	response := wzmodlib.CheckModuleCall(args)
+	response := wzmodlib.CheckModuleCall(&args)
 
 	if args.Text != "" {
 		response.Msg = fmt.Sprintf("You say: %s", args.Text)
