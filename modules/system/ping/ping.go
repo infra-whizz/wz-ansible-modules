@@ -22,5 +22,5 @@ func main() {
 		response.Msg = "Pong!"
 	}
 
-	wzmodlib.ExitWithJSON(response)
+	wzmodlib.ExitWithJSON(*response)
 }
