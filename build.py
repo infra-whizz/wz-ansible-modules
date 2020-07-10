@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+
+import argparse
 import platform
 import shutil
 import os
@@ -31,7 +34,7 @@ def find_binaries(directory: str) -> list:
                 out.append(os.path.join(directory, fname))
     return out
 
-def compile_modules(current_dir: str) -> None:
+def compile_modules(current_dir: str, use_cgo: bool = False) -> None:
     """
     Compile modules via GNU Make
     """
@@ -41,7 +44,7 @@ def compile_modules(current_dir: str) -> None:
                 os.chdir(root)
                 print("-" * 80)
                 print("Compiling module at %s", root)
-                for opt in ["gcc", "strip"]:
+                for opt in ["gcc" if not use_cgo else "all", "strip"]:
                     out = os.system("make {}".format(opt))
                     if out:
                         print("Error: module {} compilation failed. Check the output above.".format(root))
@@ -67,6 +70,8 @@ def distribute(current_dir: str) -> None:
             if name == "Makefile":
                 for bin_file in find_binaries(root):
                     dst = os.path.dirname(os.path.join(build_root, bin_file[len(os.path.join(current_dir, "modules")) + 1:]))
+                    # Each Go module in its own subdirectory, so this needs to be cut during the distribution
+                    dst = os.path.dirname(dst)
                     os.makedirs(dst, exist_ok=True)
                     shutil.move(bin_file, dst)
                     print("Moved", bin_file)
@@ -75,9 +80,13 @@ def main():
     """
     Build all binary modules
     """
+    opt_parse = argparse.ArgumentParser(description="Ansible binary module collection builder")
+    opt_parse.add_argument("-c", "--cgo", action="store_true", help="Use CGO compiler (default: false)", default=False)
+    opts = opt_parse.parse_args()
+
     current_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
     check_requirements()
-    compile_modules(current_dir)
+    compile_modules(current_dir, use_cgo=opts.cgo)
     remove_build(current_dir=current_dir)
     distribute(current_dir=current_dir)
 
