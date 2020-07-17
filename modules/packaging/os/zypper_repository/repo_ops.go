@@ -1,5 +1,12 @@
 package main
 
+import (
+	"fmt"
+	"strings"
+
+	"github.com/infra-whizz/wzmodlib"
+)
+
 type ZypperRepository struct {
 	name         string
 	baseurl      string
@@ -19,12 +26,16 @@ func NewZypperRepository() *ZypperRepository {
 	return zr
 }
 
-func (zr *ZypperRepository) bool2int(val bool) int {
-	if val {
-		return 1
-	} else {
-		return 0
-	}
+// Configure from arguments
+func (zr *ZypperRepository) Configure(args *ZypperRepositoryArgs) *ZypperRepository {
+	zr.SetName(args.Name)
+	zr.SetBaseUrl(args.Repo)
+	zr.Enable(wzmodlib.YesNo2Bool(args.Enabled))
+	zr.Autorefresh(wzmodlib.YesNo2Bool(args.Autorefresh))
+	zr.SetPriority(args.Priority)
+	zr.CheckGpg(!wzmodlib.YesNo2Bool(args.DisableGPGCheck)) // Note: inverted parameter
+	zr.KeepPackages(wzmodlib.YesNo2Bool(args.KeepPackages))
+	return zr
 }
 
 // SetName of the repository
@@ -41,25 +52,25 @@ func (zr *ZypperRepository) SetBaseUrl(url string) *ZypperRepository {
 
 // Enable repository
 func (zr *ZypperRepository) Enable(enabled bool) *ZypperRepository {
-	zr.enabled = zr.bool2int(enabled)
+	zr.enabled = wzmodlib.Bool2Int(enabled)
 	return zr
 }
 
 // Autorefresh the repository
 func (zr *ZypperRepository) Autorefresh(refresh bool) *ZypperRepository {
-	zr.autorefresh = zr.bool2int(refresh)
+	zr.autorefresh = wzmodlib.Bool2Int(refresh)
 	return zr
 }
 
 // CheckGpg key of the repository
 func (zr *ZypperRepository) CheckGpg(check bool) *ZypperRepository {
-	zr.gpgcheck = zr.bool2int(check)
+	zr.gpgcheck = wzmodlib.Bool2Int(check)
 	return zr
 }
 
 // KeepPackages in the cache
 func (zr *ZypperRepository) KeepPackages(keep bool) *ZypperRepository {
-	zr.keeppackages = zr.bool2int(keep)
+	zr.keeppackages = wzmodlib.Bool2Int(keep)
 	return zr
 }
 
@@ -70,4 +81,20 @@ func (zr *ZypperRepository) SetPriority(prio int) *ZypperRepository {
 	}
 	zr.priority = prio
 	return zr
+}
+
+// Export to config string, suitable to write it to the file
+func (zr *ZypperRepository) Export() (string, string) {
+	var out strings.Builder
+
+	out.WriteString(fmt.Sprintf("[%s]\n", zr.name))
+	out.WriteString(fmt.Sprintf("enabled=%d\n", zr.enabled))
+	out.WriteString(fmt.Sprintf("autorefresh=%d\n", zr.autorefresh))
+	out.WriteString(fmt.Sprintf("baseurl=%s\n", zr.baseurl))
+	out.WriteString("type=NONE\n")
+	out.WriteString(fmt.Sprintf("priority=%d\n", zr.priority))
+	out.WriteString(fmt.Sprintf("gpgcheck=%d\n", zr.gpgcheck))
+	out.WriteString(fmt.Sprintf("keeppackages=%d\n", zr.keeppackages))
+
+	return fmt.Sprintf("%s.repo", zr.name), out.String()
 }
