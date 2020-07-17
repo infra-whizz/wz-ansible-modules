@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
+	"os"
+	"path"
 
 	wzmodlib "github.com/infra-whizz/wzmodlib"
 )
@@ -108,18 +111,50 @@ Examples:
 
 */
 
-type ModuleArgs struct {
-	Text string
+// Remove unlink quietly, unless removal is impossible
+func quietUnlink(fpath string) error {
+	_, err := os.Stat(fpath)
+	if !os.IsNotExist(err) {
+		if err := os.Remove(fpath); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+// Update repository by creating if does not exist, refresh content or just remove it
+func updateRepo(args *ZypperRepositoryArgs, response *wzmodlib.Response) {
+	repo := NewZypperRepository().Configure(args)
+	fname, fbody := repo.Export()
+	fpath := path.Join(args.Root, "etc", "zypp", "repos.d", fname)
+	if args.State == "present" {
+		if err := ioutil.WriteFile(fpath, []byte(fbody), 0644); err != nil {
+			response.Msg = err.Error()
+			response.Failed = true
+		} else {
+			response.Msg = fmt.Sprintf("Repository %s has been updated", fpath)
+			response.Changed = true
+		}
+	} else {
+		if err := quietUnlink(fpath); err == nil {
+			response.Msg = fmt.Sprintf("Repository %s has been deleted", fpath)
+			response.Changed = true
+		} else {
+			response.Msg = err.Error()
+			response.Failed = true
+		}
+	}
 }
 
 func main() {
-	var args ModuleArgs
-	response := wzmodlib.CheckModuleCall(args)
+	var args ZypperRepositoryArgs
+	response := wzmodlib.CheckModuleCall(&args)
 
-	if args.Text != "" {
-		response.Msg = fmt.Sprintf("You say: %s", args.Text)
+	if err := args.Validate(); err != nil {
+		response.Failed = true
+		response.Msg = err.Error()
 	} else {
-		response.Msg = "Pong!"
+		updateRepo(&args, response)
 	}
 
 	wzmodlib.ExitWithJSON(*response)
