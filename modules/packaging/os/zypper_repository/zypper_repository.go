@@ -17,7 +17,9 @@ description:
 options:
     name:
         description:
-            - A name for the repository. Not required when adding repofiles.
+            - A name for the repository.
+        type: string
+        required
     repo:
         description:
             - URI of the repository or .repo file. Required when state=present.
@@ -74,6 +76,11 @@ options:
         type: bool
         default: 'yes'
 
+    keep_packages:
+        description:
+            - Keep packages in the cache
+        type: bool
+        default: 'no'
 
 Examples:
 
