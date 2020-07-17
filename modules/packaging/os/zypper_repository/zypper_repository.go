@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
+	"strings"
 
 	wzmodlib "github.com/infra-whizz/wzmodlib"
 )
@@ -111,37 +112,36 @@ Examples:
 
 */
 
-// Remove unlink quietly, unless removal is impossible
-func quietUnlink(fpath string) error {
-	_, err := os.Stat(fpath)
-	if !os.IsNotExist(err) {
-		if err := os.Remove(fpath); err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
 // Update repository by creating if does not exist, refresh content or just remove it
 func updateRepo(args *ZypperRepositoryArgs, response *wzmodlib.Response) {
 	repo := NewZypperRepository().Configure(args)
 	fname, fbody := repo.Export()
 	fpath := path.Join(args.Root, "etc", "zypp", "repos.d", fname)
 	if args.State == "present" {
-		if err := ioutil.WriteFile(fpath, []byte(fbody), 0644); err != nil {
-			response.Msg = err.Error()
-			response.Failed = true
+		existingFBody, err := ioutil.ReadFile(fpath)
+		if err == nil && strings.TrimSpace(fbody) == strings.TrimSpace(string(existingFBody)) {
+			response.Msg = fmt.Sprintf("Repository %s did not changed", fpath)
 		} else {
-			response.Msg = fmt.Sprintf("Repository %s has been updated", fpath)
-			response.Changed = true
+			if err := ioutil.WriteFile(fpath, []byte(fbody), 0644); err != nil {
+				response.Msg = err.Error()
+				response.Failed = true
+			} else {
+				response.Msg = fmt.Sprintf("Repository %s has been updated", fpath)
+				response.Changed = true
+			}
 		}
 	} else {
-		if err := quietUnlink(fpath); err == nil {
-			response.Msg = fmt.Sprintf("Repository %s has been deleted", fpath)
-			response.Changed = true
+		_, err := os.Stat(fpath)
+		if !os.IsNotExist(err) {
+			if err := os.Remove(fpath); err == nil {
+				response.Msg = fmt.Sprintf("Repository %s has been deleted", fpath)
+				response.Changed = true
+			} else {
+				response.Msg = err.Error()
+				response.Failed = true
+			}
 		} else {
-			response.Msg = err.Error()
-			response.Failed = true
+			response.Msg = fmt.Sprintf("Repository %s was not there", fpath)
 		}
 	}
 }
