@@ -1,12 +1,13 @@
 package main
 
 import (
-	"github.com/davecgh/go-spew/spew"
 	"github.com/infra-whizz/wzmodlib"
 )
 
 func runZypper(args *ZypperArgs, response *wzmodlib.Response) {
-
+	zypp := NewZypperOperations()
+	zypp.Configure(args)
+	zypp.Run()
 }
 
 func main() {
@@ -19,8 +20,5 @@ func main() {
 	} else {
 		runZypper(&args, response)
 	}
-
-	spew.Dump(args)
 	wzmodlib.ExitWithJSON(*response)
-
 }
