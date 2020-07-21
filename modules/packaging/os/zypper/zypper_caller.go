@@ -63,7 +63,7 @@ func (zypp *Zypper) Install() *Zypper {
 	return zypp.addOpts("in")
 }
 
-func (zypp *Zypper) Installed() *Zypper {
+func (zypp *Zypper) InstalledOnly() *Zypper {
 	return zypp.addOpts("--installed-only")
 }
 

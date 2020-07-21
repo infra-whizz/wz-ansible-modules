@@ -7,7 +7,12 @@ import (
 func runZypper(args *ZypperArgs, response *wzmodlib.Response) {
 	zypp := NewZypperOperations()
 	zypp.Configure(args)
-	zypp.Run()
+	var err error
+	response.Changed, err = zypp.Run()
+	if err != nil {
+		response.Failed = true
+		response.Msg = err.Error()
+	}
 }
 
 func main() {

@@ -26,7 +26,7 @@ func (zr *ZypperOperations) toBool(val string) bool {
 // FilterInstalled cleans up already installed packages
 func (zr *ZypperOperations) FilterInstalled(packages []string) ([]string, error) {
 	newPackages := make([]string, 0)
-	stout, sterr, err := zr.zypp.New().Search().Installed().Packages(packages...).Call(zr.args.PipeFile)
+	stout, sterr, err := zr.zypp.New().Search().InstalledOnly().Packages(packages...).Call(zr.args.PipeFile)
 	if err != nil {
 		panic(err)
 	}
@@ -75,20 +75,22 @@ func (zr *ZypperOperations) Configure(args *ZypperArgs) *ZypperOperations {
 }
 
 // Run zypper, configured by the state
-func (zr *ZypperOperations) Run() error {
+func (zr *ZypperOperations) Run() (bool, error) {
 	switch zr.args.State {
 	case "present":
 		packages, err := zr.FilterInstalled(zr.args.Packages)
 		if err != nil {
-			panic(err)
+			return false, err
 		}
 		zr.Install(packages...)
+		return true, nil
 	case "latest":
+		return false, fmt.Errorf("State %s not yet implemented", zr.args.State)
 	case "absent":
+		return false, fmt.Errorf("State %s not yet implemented", zr.args.State)
 	case "dist-upgrade":
+		return false, fmt.Errorf("State %s not yet implemented", zr.args.State)
 	default:
-		panic("Unknown state: " + zr.args.State) // This should not happen
+		return false, fmt.Errorf("Unknown state: %s", zr.args.State) // This should not happen though
 	}
-
-	return nil
 }
