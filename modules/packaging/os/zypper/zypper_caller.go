@@ -67,7 +67,12 @@ func (zypp *Zypper) Installed() *Zypper {
 	return zypp.addOpts("--installed-only")
 }
 
-func (zypp *Zypper) Call() (stout string, sterr string, err error) {
+func (zypp *Zypper) Call(pipe string) (stout string, sterr string, err error) {
+	if pipe != "" {
+		stout, sterr = wzlib_subprocess.StreamedExec(pipe, "zypper", zypp.opts...)
+		return stout, sterr, nil
+	}
+
 	cmd, err := wzlib_subprocess.BufferedExec("zypper", zypp.opts...)
 	if err != nil {
 		return "", "", err

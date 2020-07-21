@@ -94,6 +94,7 @@ type ZypperArgs struct {
 	Packages          []string // List of packages (instead of one name)
 	ExtraArgs         []string `json:"extra_args"`            // List of string options to "zypper"
 	ExtraPreArgs      []string `json:"extra_args_precommand"` // List of string options to "zypper" those before the main command
+	PipeFile          string   `json:"pipe_file"`             // Path to a pipefile. If specified, zypper's output XML will be streamed there.
 }
 
 func (zarg *ZypperArgs) initArrays() {

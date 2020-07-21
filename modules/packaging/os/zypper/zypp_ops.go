@@ -26,7 +26,7 @@ func (zr *ZypperOperations) toBool(val string) bool {
 // FilterInstalled cleans up already installed packages
 func (zr *ZypperOperations) FilterInstalled(packages []string) ([]string, error) {
 	newPackages := make([]string, 0)
-	stout, sterr, err := zr.zypp.New().Search().Installed().Packages(packages...).Call()
+	stout, sterr, err := zr.zypp.New().Search().Installed().Packages(packages...).Call(zr.args.PipeFile)
 	if err != nil {
 		panic(err)
 	}
@@ -56,13 +56,14 @@ func (zr *ZypperOperations) FilterInstalled(packages []string) ([]string, error)
 }
 
 func (zr *ZypperOperations) Install(packages ...string) {
-	stout, sterr, err := zr.zypp.New().Install().Packages(packages...).Call()
+	stout, sterr, err := zr.zypp.New().Install().Packages(packages...).Call(zr.args.PipeFile)
 	if err != nil {
 		panic(err)
 	}
 	if sterr != "" {
 		panic(fmt.Errorf("Error: %s", sterr))
 	}
+	// Here is JSON outputter
 	fmt.Println(stout)
 }
 
