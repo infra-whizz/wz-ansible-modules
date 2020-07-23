@@ -22,3 +22,21 @@ type ZypperSolvable struct {
 	XMLName xml.Name `xml:"solvable"`
 	Name    string   `xml:"name,attr"`
 }
+
+type ZypperProgress struct {
+	XMLName xml.Name `xml:"progress"`
+	Id      string   `xml:"id,attr"`
+	Name    string   `xml:"name,attr"`
+	Value   string   `xml:"value,attr"`
+}
+
+type ZypperDownload struct {
+	XMLName xml.Name `xml:"download"`
+	Url     string   `xml:"url,attr"`
+}
+
+type ZypperMessage struct {
+	XMLName xml.Name `xml:"message"`
+	Type    string   `xml:"type,attr"`
+	Text    string   `xml:",chardata"`
+}

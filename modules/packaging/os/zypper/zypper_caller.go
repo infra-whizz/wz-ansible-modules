@@ -69,7 +69,8 @@ func (zypp *Zypper) InstalledOnly() *Zypper {
 
 func (zypp *Zypper) Call(pipe string) (stout string, sterr string, err error) {
 	if pipe != "" {
-		stout, sterr = wzlib_subprocess.StreamedExec(pipe, "zypper", zypp.opts...)
+		p := NewTextProcessStream(pipe)
+		stout, sterr = wzlib_subprocess.StreamedExec(p, "zypper", zypp.opts...)
 		return stout, sterr, nil
 	}
 
