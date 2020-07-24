@@ -27,7 +27,7 @@ func (zr *ZypperOperations) toBool(val string) bool {
 	return wzmodlib.YesNo2Bool(val)
 }
 
-// FilterInstalled cleans up already installed packages
+// FilterInstalled cleans up already installed packages.
 func (zr *ZypperOperations) FilterInstalled(packages []string) ([]string, error) {
 	newPackages := make([]string, 0)
 	stout, sterr, err := zr.zypp.New().Search().InstalledOnly().Packages(packages...).Call(zr.args.PipeFile)
@@ -72,6 +72,20 @@ func (zr *ZypperOperations) Install(packages ...string) {
 	}
 }
 
+// Remove installedd packages
+func (zr *ZypperOperations) Remove(packages ...string) {
+	if len(packages) == 0 {
+		return
+	}
+	_, sterr, err := zr.zypp.New().Remove().Packages(packages...).Call(zr.args.PipeFile)
+	if err != nil {
+		panic(err)
+	}
+	if sterr != "" {
+		panic(fmt.Errorf("Error: %s", sterr))
+	}
+}
+
 // Configure from arguments
 func (zr *ZypperOperations) Configure(args *ZypperArgs) *ZypperOperations {
 	zr.args = args
@@ -92,6 +106,11 @@ func (zr *ZypperOperations) Run() (bool, error) {
 	case "latest":
 		return false, fmt.Errorf("State %s not yet implemented", zr.args.State)
 	case "absent":
+		packages, err := zr.FilterInstalled(zr.args.Packages)
+		if err != nil {
+			return false, err
+		}
+		zr.Remove(packages...)
 		return false, fmt.Errorf("State %s not yet implemented", zr.args.State)
 	case "dist-upgrade":
 		return false, fmt.Errorf("State %s not yet implemented", zr.args.State)
