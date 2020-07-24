@@ -94,7 +94,11 @@ func (zr *ZypperOperations) FilterInstalled(packages []string) ([]string, error)
 	return newPackages, nil
 }
 
-func (zr *ZypperOperations) Install(packages ...string) error {
+func (zr *ZypperOperations) Install() error {
+	packages, err := zr.FilterInstalled(zr.args.Packages)
+	if err != nil {
+		return err
+	}
 	if len(packages) == 0 {
 		return fmt.Errorf("No packages has been selected for installation")
 	}
@@ -111,9 +115,8 @@ func (zr *ZypperOperations) Install(packages ...string) error {
 }
 
 // Remove installedd packages
-func (zr *ZypperOperations) Remove(packages ...string) error {
-	// Throw away new packages (non installed)
-	packages, err := zr.FilterNew(packages)
+func (zr *ZypperOperations) Remove() error {
+	packages, err := zr.FilterNew(zr.args.Packages)
 	if err != nil {
 		return err
 	}
@@ -144,17 +147,13 @@ func (zr *ZypperOperations) Configure(args *ZypperArgs) *ZypperOperations {
 func (zr *ZypperOperations) Run() (bool, error) {
 	switch zr.args.State {
 	case "present":
-		packages, err := zr.FilterInstalled(zr.args.Packages)
-		if err != nil {
-			return false, err
-		}
-		if err := zr.Install(packages...); err != nil {
+		if err := zr.Install(); err != nil {
 			return false, err
 		}
 	case "latest":
 		return false, fmt.Errorf("State %s not yet implemented", zr.args.State)
 	case "absent":
-		if err := zr.Remove(zr.args.Packages...); err != nil {
+		if err := zr.Remove(); err != nil {
 			return false, err
 		}
 	case "dist-upgrade":
