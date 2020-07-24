@@ -68,6 +68,11 @@ func (zypp *Zypper) Install() *Zypper {
 	return zypp.addOpts("in")
 }
 
+// Remove packages using Zypper
+func (zypp *Zypper) Remove() *Zypper {
+	return zypp.addOpts("rm")
+}
+
 // InstalledOnly is to notify Zypper to set --installed-only flag
 func (zypp *Zypper) InstalledOnly() *Zypper {
 	return zypp.addOpts("--installed-only")
