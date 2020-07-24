@@ -60,15 +60,16 @@ func (zr *ZypperOperations) FilterInstalled(packages []string) ([]string, error)
 }
 
 func (zr *ZypperOperations) Install(packages ...string) {
-	stout, sterr, err := zr.zypp.New().Install().Packages(packages...).Call(zr.args.PipeFile)
+	if len(packages) == 0 {
+		return
+	}
+	_, sterr, err := zr.zypp.New().Install().Packages(packages...).Call(zr.args.PipeFile)
 	if err != nil {
 		panic(err)
 	}
 	if sterr != "" {
 		panic(fmt.Errorf("Error: %s", sterr))
 	}
-	// Here is JSON outputter
-	fmt.Println(stout)
 }
 
 // Configure from arguments
