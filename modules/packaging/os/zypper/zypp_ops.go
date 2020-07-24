@@ -4,17 +4,21 @@ import (
 	"encoding/xml"
 	"fmt"
 
+	wzlib_logger "github.com/infra-whizz/wzlib/logger"
 	"github.com/infra-whizz/wzmodlib"
+	"github.com/sirupsen/logrus"
 )
 
 type ZypperOperations struct {
 	args *ZypperArgs
 	zypp *Zypper
+	wzlib_logger.WzLogger
 }
 
 func NewZypperOperations() *ZypperOperations {
 	zr := new(ZypperOperations)
 	zr.zypp = NewZypper().XML(true)
+	zr.GetLogger().SetLevel(logrus.InfoLevel)
 	return zr
 }
 
