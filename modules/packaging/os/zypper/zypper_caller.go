@@ -14,6 +14,7 @@ type Zypper struct {
 	exec         string
 }
 
+// NewZypper creates a whole Zypper object class
 func NewZypper() *Zypper {
 	zypp := new(Zypper)
 	zypp.exec = "zypper"
@@ -22,6 +23,7 @@ func NewZypper() *Zypper {
 	return zypp
 }
 
+// New instance of the volatile Zypper call
 func (zypp *Zypper) New() *Zypper {
 	instance := NewZypper()
 	instance.root = zypp.root
@@ -51,22 +53,27 @@ func (zypp *Zypper) SetRoot(root string) *Zypper {
 	return zypp
 }
 
+// Packages set
 func (zypp *Zypper) Packages(names ...string) *Zypper {
 	return zypp.addOpts(names...)
 }
 
+// Search mode via Zypper. This turns just search mode, the filtering is not included.
 func (zypp *Zypper) Search() *Zypper {
 	return zypp.addOpts("search")
 }
 
+// Install packages using Zypper
 func (zypp *Zypper) Install() *Zypper {
 	return zypp.addOpts("in")
 }
 
+// InstalledOnly is to notify Zypper to set --installed-only flag
 func (zypp *Zypper) InstalledOnly() *Zypper {
 	return zypp.addOpts("--installed-only")
 }
 
+// Call Zypper command
 func (zypp *Zypper) Call(pipe string) (stout string, sterr string, err error) {
 	if pipe != "" {
 		p := NewTextProcessStream(pipe)
