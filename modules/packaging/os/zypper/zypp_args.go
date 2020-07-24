@@ -95,6 +95,7 @@ type ZypperArgs struct {
 	ExtraArgs         []string `json:"extra_args"`            // List of string options to "zypper"
 	ExtraPreArgs      []string `json:"extra_args_precommand"` // List of string options to "zypper" those before the main command
 	PipeFile          string   `json:"pipe_file"`             // Path to a pipefile. If specified, zypper's output XML will be streamed there.
+	Debug             string   // Debug on or off. This will break integration right away, if ON. Used only during module development.
 }
 
 func (zarg *ZypperArgs) initArrays() {
@@ -113,6 +114,10 @@ func (zarg *ZypperArgs) Validate() error {
 	var err error
 
 	zarg.initArrays()
+
+	if zarg.Debug, err = wzmodlib.CheckAnsibleBool("debug", zarg.Debug, false); err != nil {
+		return err
+	}
 
 	if zarg.Root == "" {
 		zarg.Root = "/"

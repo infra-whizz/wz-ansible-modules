@@ -18,7 +18,6 @@ type ZypperOperations struct {
 func NewZypperOperations() *ZypperOperations {
 	zr := new(ZypperOperations)
 	zr.zypp = NewZypper().XML(true)
-	zr.GetLogger().SetLevel(logrus.DebugLevel)
 	return zr
 }
 
@@ -140,6 +139,13 @@ func (zr *ZypperOperations) Remove() error {
 func (zr *ZypperOperations) Configure(args *ZypperArgs) *ZypperOperations {
 	zr.args = args
 	zr.zypp.SetRoot(zr.args.Root)
+
+	if zr.args.Debug == "yes" {
+		zr.GetLogger().SetLevel(logrus.TraceLevel)
+	} else {
+		zr.GetLogger().SetLevel(logrus.PanicLevel)
+	}
+
 	return zr
 }
 
