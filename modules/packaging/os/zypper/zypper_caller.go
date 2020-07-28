@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-
 	wzlib_subprocess "github.com/infra-whizz/wzlib/subprocess"
 )
 
@@ -93,7 +91,6 @@ func (zypp *Zypper) Call(pipe string) (stout string, sterr string, err error) {
 	stout = cmd.StdoutString()
 	sterr = cmd.StderrString()
 
-	fmt.Println(stout)
 	cmd.Wait()
 
 	return stout, sterr, nil
