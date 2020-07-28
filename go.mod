@@ -9,5 +9,5 @@ require (
 	github.com/infra-whizz/wzlib v0.0.0-20200709175548-7accf26d7b69
 	github.com/infra-whizz/wzmodlib v0.0.0-20200720151532-7bd7a478413f
 	github.com/sirupsen/logrus v1.6.0 // indirect
-	golang.org/x/sys v0.0.0-20200720211630-cb9d2d5c5666
+	golang.org/x/sys v0.0.0-20200728102440-3e129f6d46b1
 )
