@@ -1,0 +1,1 @@
+{"packages": ["emacs", "thisdoesnotexist"], "root": "/tmp/test", "pipe_file": "/tmp/pipe.log", "state": "absent", "debug": "yes"}
