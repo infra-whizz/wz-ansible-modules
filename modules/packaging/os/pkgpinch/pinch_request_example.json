@@ -1,0 +1,1 @@
+{"packages": ["vim", "thisdoesnotexist"], "ignore_names": "yes", "manager": "dpkg", "root": "/tmp/something"}
