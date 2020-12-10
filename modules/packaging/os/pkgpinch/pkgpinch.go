@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"strings"
 
 	wzmodlib "github.com/infra-whizz/wzmodlib"
 )
@@ -54,9 +54,26 @@ Examples:
 
 // Pinch packages
 func pinchPackages(args *PkgPinchArgs, response *wzmodlib.Response) {
+	var out strings.Builder
 	repo := NewPkgPinch().Configure(args)
-	response.Msg = fmt.Sprintf("Errors: %v, Names: %v, Packages: %v, Manager: %v, Root: %v",
-		repo.ignoreErrors, repo.ignoreWrongPkgNames, repo.pkgNames, repo.packageManager, repo.root)
+	mgr := NewPinchMgr(repo.packageManager, repo.root)
+	changes := 0
+	for _, pkgname := range repo.pkgNames {
+		if err := mgr.Pinch(pkgname); err != nil {
+			if !repo.ignoreErrors {
+				// TODO: Check for wrong name error
+				out.WriteString(err.Error() + ". ")
+			} else {
+				changes++
+			}
+		}
+	}
+	errMsg := strings.TrimSpace(out.String())
+	if errMsg != "" {
+		response.Msg = errMsg
+		response.Failed = true
+	}
+	response.Changed = changes > 0
 }
 
 func main() {
