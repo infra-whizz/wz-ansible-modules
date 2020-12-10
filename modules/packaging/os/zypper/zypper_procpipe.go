@@ -42,7 +42,7 @@ func (zs *TextProcessStream) parseLine(line string) string {
 func (zs *TextProcessStream) parseMessage(line string) string {
 	var message ZypperMessage
 	if err := xml.Unmarshal([]byte(line), &message); err != nil {
-		panic(err)
+		return fmt.Sprintf("\n-----[XML MESSAGE ERROR]-------\nError: %s\nBody:\n%s\n---------------\n", err.Error(), line)
 	}
 	return fmt.Sprintf("LOG\t%s\t%s", message.Type, strings.ReplaceAll(message.Text, "\t", " "))
 }
@@ -50,7 +50,7 @@ func (zs *TextProcessStream) parseMessage(line string) string {
 func (zs *TextProcessStream) parseDownload(line string) string {
 	var downloadMessage ZypperDownload
 	if err := xml.Unmarshal([]byte(line), &downloadMessage); err != nil {
-		panic(err)
+		return fmt.Sprintf("\n-----[XML DOWNLOAD ERROR]-------\nError: %s\nBody:\n%s\n---------------\n", err.Error(), line)
 	}
 	return fmt.Sprintf("LOG\tinfo\t%s", downloadMessage.Url)
 }
@@ -58,7 +58,7 @@ func (zs *TextProcessStream) parseDownload(line string) string {
 func (zs *TextProcessStream) parseProgress(line string) string {
 	var progressMessage ZypperProgress
 	if err := xml.Unmarshal([]byte(line), &progressMessage); err != nil {
-		panic(err)
+		return fmt.Sprintf("\n-----[XML PROGRESS]-------\nError: %s\nBody:\n%s\n---------------\n", err.Error(), line)
 	}
 	return fmt.Sprintf("PGS\t%s\t%s", progressMessage.Value, progressMessage.Name)
 }
