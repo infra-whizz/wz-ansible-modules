@@ -49,6 +49,18 @@ Examples:
       - dracut
     ignore_names: yes
 
+- pkgpinch:
+    pkgs:
+      - vim
+      - suse_branding
+      - dracut
+    ignore_names: yes
+    options:
+      - --noscripts
+      - --nodeps
+      - --dbpath
+      - /var/lib/rpm
+
 */
 
 // Pinch packages
