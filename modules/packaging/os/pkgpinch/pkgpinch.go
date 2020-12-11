@@ -48,7 +48,6 @@ Examples:
       - suse_branding
       - dracut
     ignore_names: yes
-'''
 
 */
 
