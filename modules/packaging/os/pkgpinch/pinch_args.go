@@ -8,10 +8,13 @@ import (
 
 type PkgPinchArgs struct {
 	Packages       []string
+	Options        []string
 	IgnoreNames    string `json:"ignore_names"`  // Ignore naming errors
 	IgnoreErrors   string `json:"ignore_errors"` // Ignore all errors
 	PackageManager string `json:"manager"`       // Package manager of a choice
 	Root           string // System root. Default "/"
+
+	wzmodlib.BaseArg
 }
 
 // Default values are set if none found.
@@ -40,5 +43,5 @@ func (arg *PkgPinchArgs) Validate() error {
 		return err
 	}
 
-	return nil
+	return arg.BaseArg.Validate()
 }

@@ -72,7 +72,7 @@ Examples:
 func pinchPackages(args *PkgPinchArgs, response *wzmodlib.Response) {
 	var out strings.Builder
 	repo := NewPkgPinch().Configure(args)
-	mgr := NewPinchMgr(repo.packageManager, repo.root)
+	mgr := NewPinchMgr(repo.packageManager, repo.root).SetAdditionalOptions(repo.packageManagerOpts).SetDebug(repo.debug)
 	changes := 0
 	for _, pkgname := range repo.pkgNames {
 		if err := mgr.Pinch(pkgname); err != nil {
