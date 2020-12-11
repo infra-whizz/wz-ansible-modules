@@ -104,3 +104,9 @@ func (pm *PinchMgr) pinchRpm(name string) error {
 
 	return err
 }
+
+// Use Dpkg to uninstall a package
+func (pm *PinchMgr) pinchDpkg(name string) error {
+	// cmd, err := wzlib_subprocess.BufferedExec("dpkg", "--root", pm.root, "--remove", name)
+	return fmt.Errorf("Debian packaging is not implemented yet :-(")
+}
