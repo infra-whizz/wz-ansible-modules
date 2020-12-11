@@ -38,6 +38,11 @@ options:
         required: false
         choices: ['rpm', 'dpkg']
         default: "rpm"
+    options:
+        description:
+            - Additional package manager options
+        required: false
+        type: list
 
 Examples:
 
