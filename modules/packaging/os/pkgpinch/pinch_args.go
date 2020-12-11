@@ -6,19 +6,6 @@ import (
 	wzmodlib "github.com/infra-whizz/wzmodlib"
 )
 
-/*
-ignore_names:
-description:
-	- Ignore naming errors (e.g. specific package is not installed)
-type: bool
-default: 'no'
-ignore_errors:
-description:
-	- Ignore all errors. This will also set "ignore_names" to True
-type: bool
-default: 'no'
-*/
-
 type PkgPinchArgs struct {
 	Packages       []string
 	IgnoreNames    string `json:"ignore_names"`  // Ignore naming errors
