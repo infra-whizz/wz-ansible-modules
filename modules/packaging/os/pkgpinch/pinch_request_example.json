@@ -1,1 +1,1 @@
-{"packages": ["vim", "thisdoesnotexist"], "ignore_names": "yes", "manager": "dpkg", "root": "/tmp/something"}
+{"packages": ["terminfo-base"], "options": ["--noscripts", "--nodeps", "--dbpath", "/var/lib/rpm"], "ignore_names": "yes", "manager": "rpm", "root": "/my/chroot", "debug": "yes"}
