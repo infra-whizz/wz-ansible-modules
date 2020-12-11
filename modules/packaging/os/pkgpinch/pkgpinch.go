@@ -13,7 +13,7 @@ author: "Bo Maryniuk (isbm)"
 version_added: "2.9"
 short_description: System pincher
 description:
-    - Direct package removal (dpkg, RPM)
+    - Direct package removal (dpkg, RPM) that supports chrooted environment
 options:
     packages:
         description:
