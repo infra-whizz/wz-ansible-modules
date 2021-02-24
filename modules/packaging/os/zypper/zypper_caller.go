@@ -27,7 +27,12 @@ func (zypp *Zypper) New() *Zypper {
 	instance.root = zypp.root
 	instance.xmlInterface = zypp.xmlInterface
 
-	instance.opts = []string{"--root", zypp.root, "--non-interactive", "--gpg-auto-import-keys"}
+	instance.opts = []string{}
+	if zypp.root != "/" {
+		instance.opts = append(instance.opts, "--root", zypp.root)
+	}
+	instance.opts = append(instance.opts, "--non-interactive", "--gpg-auto-import-keys")
+
 	if zypp.xmlInterface {
 		instance.opts = append(instance.opts, "-x")
 	}
