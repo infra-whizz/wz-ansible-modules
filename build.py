@@ -12,6 +12,7 @@ def check_requirements() -> None:
     Check main requirements
     """
     required = {
+        "upx": "ELF binary compressor",
         "gcc": "GNU C Compiler",
         "gccgo": "GCC backend for Go compiler",
         "make": "GNU Make utility for directing complilation",
@@ -44,7 +45,7 @@ def compile_modules(current_dir: str, use_cgo: bool = False) -> None:
                 os.chdir(root)
                 print("-" * 80)
                 print("Compiling module at %s", root)
-                for opt in ["gcc" if not use_cgo else "all", "strip"]:
+                for opt in ["gcc" if not use_cgo else "all"]:
                     out = os.system("make {}".format(opt))
                     if out:
                         print("Error: module {} compilation failed. Check the output above.".format(root))

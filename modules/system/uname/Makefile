@@ -38,7 +38,8 @@ strip:
 	strip $(OUT)
 
 compress:
-	upx -9t $(OUT)
+	upx -9 $(OUT)
+	upx -t $(OUT)
 
 clean:
 	rm $(OUT)
