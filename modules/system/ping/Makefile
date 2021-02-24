@@ -13,8 +13,8 @@ endif
 SOURCES = \
 	*.go
 
-all: update-deps mainbuild strip
-gcc: update-deps with-gcc strip
+all: update-deps mainbuild strip compress
+gcc: update-deps with-gcc strip compress
 
 mainbuild: $(SOURCES)
 	$(GO) build -x -o $(OUT) $(SOURCES)
@@ -36,6 +36,9 @@ deps:
 	$(GO) get -v ./... 2>/dev/null ||:
 strip:
 	strip $(OUT)
+
+compress:
+	upx -9t $(OUT)
 
 clean:
 	rm $(OUT)
