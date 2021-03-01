@@ -6,8 +6,8 @@ GO := go
 SOURCES = \
 	*.go
 
-all: update-deps mainbuild strip compress
-gcc: update-deps with-gcc strip compress
+all: update-deps mainbuild strip
+gcc: update-deps with-gcc strip
 
 mainbuild: $(SOURCES)
 	$(GO) build -x -o $(OUT) $(SOURCES)
