@@ -12,6 +12,7 @@ type ModuleArgs struct {
 	Release    bool
 	Sysname    bool
 	Version    bool
+	All        bool
 }
 
 func main() {
@@ -25,42 +26,42 @@ func main() {
 		wzmodlib.ExitWithFailedJSON(*response)
 	}
 
-	if args.Domainname {
+	if args.Domainname || args.All {
 		domainname := wzmodlib.Byte65toS(uts.Domainname)
 		if domainname != "" {
 			response.Return["domainname"] = domainname
 		}
 	}
 
-	if args.Machine {
+	if args.Machine || args.All {
 		machine := wzmodlib.Byte65toS(uts.Machine)
 		if machine != "" {
 			response.Return["machine"] = machine
 		}
 	}
 
-	if args.Nodename {
+	if args.Nodename || args.All {
 		nodename := wzmodlib.Byte65toS(uts.Nodename)
 		if nodename != "" {
 			response.Return["nodename"] = nodename
 		}
 	}
 
-	if args.Release {
+	if args.Release || args.All {
 		release := wzmodlib.Byte65toS(uts.Release)
 		if release != "" {
 			response.Return["release"] = release
 		}
 	}
 
-	if args.Sysname {
+	if args.Sysname || args.All {
 		sysname := wzmodlib.Byte65toS(uts.Sysname)
 		if sysname != "" {
 			response.Return["sysname"] = sysname
 		}
 	}
 
-	if args.Version {
+	if args.Version || args.All {
 		version := wzmodlib.Byte65toS(uts.Version)
 		if version != "" {
 			response.Return["version"] = version
