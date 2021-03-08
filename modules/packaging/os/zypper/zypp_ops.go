@@ -21,11 +21,6 @@ func NewZypperOperations() *ZypperOperations {
 	return zr
 }
 
-// An alias to YesNo2Bool
-func (zr *ZypperOperations) toBool(val string) bool {
-	return wzmodlib.YesNo2Bool(val)
-}
-
 // FilterNew removes all the packages that are not installed.
 func (zr *ZypperOperations) FilterNew(packages []string) ([]string, error) {
 	installedPackages := make([]string, 0)
