@@ -102,7 +102,9 @@ func (zr *ZypperOperations) Install() error {
 		return fmt.Errorf("No packages has been selected for installation")
 	}
 
-	_, sterr, err := zr.zypp.New().Install().Packages(packages...).Call(zr.args.PipeFile)
+	_, sterr, err := zr.zypp.New().
+		IgnoreGPGSignature(wzmodlib.YesNo2Bool(zr.args.DisableGPGCheck)).Install().
+		IgnoreRecommends(wzmodlib.YesNo2Bool(zr.args.DisableRecommends)).Packages(packages...).Call(zr.args.PipeFile)
 	if err != nil {
 		return err
 	}

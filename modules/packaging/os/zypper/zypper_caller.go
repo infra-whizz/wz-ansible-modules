@@ -66,6 +66,22 @@ func (zypp *Zypper) Search() *Zypper {
 	return zypp.addOpts("search")
 }
 
+func (zypp *Zypper) IgnoreGPGSignature(ignore bool) *Zypper {
+	if ignore {
+		return zypp.addOpts("--no-gpg-checks")
+	}
+	return zypp
+}
+
+// IgnoreRecommends parameter
+func (zypp *Zypper) IgnoreRecommends(ignore bool) *Zypper {
+	if ignore {
+		return zypp.addOpts("--no-recommends")
+	} else {
+		return zypp
+	}
+}
+
 // Install packages using Zypper
 func (zypp *Zypper) Install() *Zypper {
 	return zypp.addOpts("in")
