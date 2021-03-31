@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	wzmodlib "github.com/infra-whizz/wzmodlib"
@@ -79,15 +80,17 @@ func pinchPackages(args *PkgPinchArgs, response *wzmodlib.Response) {
 			if !repo.ignoreErrors {
 				// TODO: Check for wrong name error
 				out.WriteString(err.Error() + ". ")
-			} else {
-				changes++
 			}
+		} else {
+			changes++
 		}
 	}
 	errMsg := strings.TrimSpace(out.String())
 	if errMsg != "" {
 		response.Msg = errMsg
 		response.Failed = true
+	} else {
+		response.Msg = fmt.Sprintf("Removed %d packages: %s", changes, strings.Join(repo.pkgNames, ", "))
 	}
 	response.Changed = changes > 0
 }
