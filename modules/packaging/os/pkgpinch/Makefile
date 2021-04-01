@@ -10,7 +10,7 @@ all: update-deps mainbuild strip
 gcc: update-deps with-gcc strip
 
 mainbuild: $(SOURCES)
-	$(GO) build -x -o $(OUT) $(SOURCES)
+	CGO_ENABLED=0 $(GO) build -a -tags netgo -ldflags '-w -extldflags "-static"' -o $(OUT) $(SOURCES)
 
 with-gcc:
 ifneq ($GCCGO,)
