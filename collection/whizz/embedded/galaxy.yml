@@ -1,0 +1,17 @@
+namespace: whizz
+name: embedded
+version: 1.0.0
+readme: README.md
+authors:
+- Bo Maryniuk <bo@maryniuk.net>
+description: Binary modules from Whizz CMS for generic use on embedded images
+license:
+- MIT
+license_file: ''
+tags: ["whizz", "embedded"]
+dependencies: {}
+repository: http://github.com/infra-whizz
+documentation: http://github.com/infra-whizz
+homepage: http://github.com/infra-whizz
+issues: http://github.com/infra-whizz
+build_ignore: []
