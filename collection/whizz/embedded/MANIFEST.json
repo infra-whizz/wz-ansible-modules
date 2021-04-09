@@ -1,0 +1,33 @@
+{
+ "collection_info": {
+  "namespace": "whizz",
+  "name": "embedded",
+  "version": "1.0.0",
+  "authors": [
+   "Bo Maryniuk <bo@maryniuk.net>"
+  ],
+  "readme": "README.md",
+  "tags": [
+   "whizz",
+   "embedded"
+  ],
+  "description": "Binary modules from Whizz CMS for generic use on embedded images",
+  "license": [
+   "MIT"
+  ],
+  "license_file": null,
+  "dependencies": {},
+  "repository": "http://github.com/infra-whizz",
+  "documentation": "http://github.com/infra-whizz",
+  "homepage": "http://github.com/infra-whizz",
+  "issues": "http://github.com/infra-whizz"
+ },
+ "file_manifest_file": {
+  "name": "FILES.json",
+  "ftype": "file",
+  "chksum_type": "sha256",
+  "chksum_sha256": "9e1062cdd8bce198861435ffb875f680c6981c9b994c0e70008666c271b9b9be",
+  "format": 1
+ },
+ "format": 1
+}
