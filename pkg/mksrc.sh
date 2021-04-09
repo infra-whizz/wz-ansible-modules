@@ -2,7 +2,7 @@
 
 # Configuration
 P_NAME="whizz-ansible-modules"
-P_SRC_DIRS=("modules")
+P_SRC_DIRS=("modules" "collection")
 P_DOC_DIRS=()
 P_FILES=("LICENSE" "README.md" "go.mod" "go.sum")
 
