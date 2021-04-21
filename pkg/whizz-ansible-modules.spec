@@ -83,7 +83,7 @@ do
     for m_name in "${!modules[@]}"
     do
 	if [ "$arch" = "amd64" ]; then
-	    x_arch="x84_64"
+	    x_arch="x86_64"
 	else
 	    x_arch="$arch"
 	fi
